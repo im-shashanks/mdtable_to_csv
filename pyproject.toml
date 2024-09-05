@@ -1,0 +1,28 @@
+[project]
+name = "markdown_table_to_csv_converter"
+version = "0.0.1"
+authors = [
+  { name="Shashank S", email="procodere@gmail.com" },
+]
+description = "Extract tables from markdown files and converts them to CSV format"
+readme = "README.md"
+dependencies = [
+  "rich",
+  "typer==0.12.5"
+]
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3.0",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/im-shashanks/mdtable_to_csv"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+# [project.scripts]
+# mttc = "app:cli_app"
