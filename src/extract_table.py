@@ -17,36 +17,32 @@ class ExtractTable(object):
             md_file = md_file.read()
 
         tables = []
-        no_more_tables = False
-        page_end = len(md_file)
+
+        # Check if a table exists in the markdown file
+        init_idx = 0
+        while True: # Looping through the entire file to identify tables
+            if not md_file.find("|", init_idx) == -1:
+                tbl_start_idx = md_file.find("|", init_idx)
+                tbl_end_idx = None
+            else: break
+
+            # Scan the length of table to find the end of table. Find the last "|"
+            # The last "|" is found when there isn't another "|" after "|"
+
+            search_idx = tbl_start_idx # helper flag to updated end search idx
+            while True: # Looping the length of table
+                end_idx = md_file.find("|\n", search_idx)
+                
+                if md_file[end_idx + 2] == "|":
+                    search_idx = end_idx + 2
+                    continue
+                else:
+                    tbl_end_idx = end_idx
+                    break
+            tables.append(md_file[tbl_start_idx: tbl_end_idx+1])
+            init_idx = tbl_end_idx+1
         
-        try:
-            tbl_start_idx = md_file.index("|")
-        except:
-            no_more_tables = True
-        try:
-            tbl_end_idx = md_file.index("|\n\n", tbl_start_idx)
-        except:
-            tbl_end_idx = md_file.index("\n", tbl_start_idx)
-            no_more_tables = True
-        
-        tbl = md_file[tbl_start_idx: tbl_end_idx+1]
-        tables.append(tbl)
-
-        while no_more_tables==False:
-            try:
-                tbl_start_idx = md_file.index("|", tbl_end_idx + 1)
-            except: break
-            try:
-                tbl_end_idx = md_file.index("|\n\n", tbl_start_idx)
-            except:
-                tbl_end_idx = md_file.index("\n", tbl_start_idx)
-                no_more_tables = True
-
-            tbl = md_file[tbl_start_idx: tbl_end_idx+1]
-            tables.append(tbl)
-
         # for table in tables:
         #     print(table)
 
-        # return tables
+        return tables

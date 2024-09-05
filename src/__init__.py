@@ -1,1 +1,1 @@
-from src import extract_table
+from extract_table import ExtractTable
