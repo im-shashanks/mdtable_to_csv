@@ -17,6 +17,7 @@ class ExtractTable(object):
             md_file = md_file.read()
 
         tables = []
+        end_of_file = None
 
         # Check if a table exists in the markdown file
         init_idx = 0
@@ -29,9 +30,16 @@ class ExtractTable(object):
             # Scan the length of table to find the end of table. Find the last "|"
             # The last "|" is found when there isn't another "|" after "|"
 
-            search_idx = tbl_start_idx # helper flag to updated end search idx
+            search_idx = tbl_start_idx # helper flag to update end search idx
             while True: # Looping the length of table
                 end_idx = md_file.find("|\n", search_idx)
+                if end_idx == -1:
+                    # Check if this is the last table or end of file
+                    end_of_file = len(md_file)
+                    diff = end_of_file - end_idx
+                    if md_file[end_idx : end_idx + diff] == "|":
+                        tbl_end_idx = end_of_file
+                    break
                 
                 if md_file[end_idx + 2] == "|":
                     search_idx = end_idx + 2
@@ -39,8 +47,14 @@ class ExtractTable(object):
                 else:
                     tbl_end_idx = end_idx
                     break
-            tables.append(md_file[tbl_start_idx: tbl_end_idx+1])
-            init_idx = tbl_end_idx+1
+            if end_of_file == None:
+                tables.append(md_file[tbl_start_idx: tbl_end_idx+1])
+            else:
+                tables.append(md_file[tbl_start_idx: tbl_end_idx])
+                
+            if end_of_file == None:
+                init_idx = tbl_end_idx+1
+            else: break
         
         # for table in tables:
         #     print(table)
