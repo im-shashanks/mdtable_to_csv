@@ -46,4 +46,24 @@ def test_extract_table_from_file_heading_after_tbl():
 
     assert set(end_result) == set(tables)
 
+def test_extract_table_from_file_spaces_after_tbl():
+    file = "test/test_res/test_file_4.md"
+    end_result = """| Item              | In Stock | Price |
+| :---------------- | :------: | ----: |
+| Python Hat        |   True   | 23.99 |
+| SQL Hat           |   True   | 23.99 |
+| Codecademy Tee    |  False   | 19.99 |
+| Codecademy Hoodie |  False   | 42.99 |"""
+    table_extractor = ExtractTable(file)
+    tables = table_extractor.extract_table_from_file()
+
+    assert end_result in tables
+
         
+def test_extract_table_from_file_cell_widths_vary():
+    file = "test/test_res/test_file_5.md"
+    
+    table_extractor = ExtractTable(file)
+    tables = table_extractor.extract_table_from_file()
+
+    assert len(tables) == 3

@@ -1,3 +1,4 @@
+# File with no space after the table
 # Savings
 
 | Month    | Savings |
