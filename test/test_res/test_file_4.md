@@ -1,4 +1,4 @@
-# File with tab after the last tables "|"
+# File with tab after the last tables "pipe"
 # Savings
 
 | Month    | Savings |

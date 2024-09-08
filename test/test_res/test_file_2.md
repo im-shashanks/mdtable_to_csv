@@ -1,4 +1,4 @@
-# File with no \n after the last "|" of the last table
+# File with no nextline after the last "pipe" of the last table
 # Savings
 
 | Month    | Savings |

@@ -67,3 +67,15 @@ def test_extract_table_from_file_cell_widths_vary():
     tables = table_extractor.extract_table_from_file()
 
     assert len(tables) == 3
+
+def test_extract_table_from_file_real_life_md():
+    file = "test/test_res/test_file_6.md"
+
+    table_extractor = ExtractTable(file)
+
+    tables = table_extractor.extract_table_from_file()
+
+    for table in tables:
+        print(table)
+
+    assert len(tables) == 6

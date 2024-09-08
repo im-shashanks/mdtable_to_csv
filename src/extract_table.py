@@ -1,4 +1,5 @@
 from rich import print as rprint
+import re
 
 class ExtractTable(object):
 
@@ -17,48 +18,26 @@ class ExtractTable(object):
             md_file = md_file.read().strip()
 
         tables = []
-        end_of_file = None
+        lines = md_file.splitlines()
+        table = []
+        inside_table = False
 
-        # Check if a table exists in the markdown file
-        init_idx = 0
-        
-        while True: # Looping through the entire file to identify tables
-            if not md_file.find("|", init_idx) == -1:
-                tbl_start_idx = md_file.find("|", init_idx)
-                tbl_end_idx = None
-            else: break
+        for line in lines:
+            stripped_line = line.strip()
 
-            # Scan the length of table to find the end of table. Find the last "|"
-            # The last "|" is found when there isn't another "|" after "|"
-
-            search_idx = tbl_start_idx # helper flag to update end search idx
-            while True: # Looping the length of table
-                row_end_idx = md_file.find("|\n", search_idx)
-                if row_end_idx == -1:
-                    # Check if this is the last table or end of file
-                    end_of_file = len(md_file)
-                    diff = end_of_file - search_idx
-                    if md_file[search_idx : search_idx + diff] == "|":
-                        tbl_end_idx = end_of_file
-                    break
-                
-                if md_file[row_end_idx + 2] == "|":
-                    search_idx = row_end_idx + 2
-                    continue
-                else:
-                    tbl_end_idx = row_end_idx
-                    break
-            if end_of_file == None:
-                tables.append(md_file[tbl_start_idx: tbl_end_idx+1])
+            # Detect if this line is part of a table (starts with '|')
+            if stripped_line.startswith("|"):
+                inside_table = True
+                table.append(line)  # Add line to the current table
             else:
-                tables.append(md_file[tbl_start_idx: tbl_end_idx])
-                
-            if end_of_file == None:
-                init_idx = tbl_end_idx+1
-            else: break
-        
-        for table in tables:
-            print(table)
-            print("----------")
+                if inside_table:
+                    # End of a table if a non-table line is encountered
+                    tables.append("\n".join(table).strip())
+                    table = []  # Reset for the next table
+                    inside_table = False
+
+        # If a table was being processed when the file ends, append it
+        if table:
+            tables.append("\n".join(table).strip())
 
         return tables
