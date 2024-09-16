@@ -1,5 +1,4 @@
 from rich import print as rprint
-import re
 
 class ExtractTable(object):
 

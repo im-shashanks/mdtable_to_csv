@@ -75,7 +75,19 @@ def test_extract_table_from_file_real_life_md():
 
     tables = table_extractor.extract_table_from_file()
 
-    for table in tables:
-        print(table)
-
     assert len(tables) == 6
+
+def test_extract_table_from_file_closest_to_real_file_md():
+    file = "test/test_res/test_file_7.md"
+
+    table_extractor = ExtractTable(file)
+
+    tables = table_extractor.extract_table_from_file()
+
+    end_result = """| Name       | Age | Location |
+| ---------- | --- | -------- |
+| John Doe   | 25  | New York |
+| Jane Smith |     | London   |
+| Alice      | 30  |"""
+
+    assert end_result in tables
